@@ -1,5 +1,5 @@
 
-Column	Desc	Initial	Model 1
+Column	Desc	Initial	Model1
 price	price	include	include
 weekly_price	weekly price	include	
 monthly_price	monthly price	include	
