@@ -12,8 +12,10 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.linear_model import Lasso, Ridge
 
 def preprocess(X, y):
-    '''Takes in features and target and implements all preprocessing steps for categorical and continuous features returning 
-    train and test dataframes with targets'''
+    '''
+    Takes in features and target and implements all preprocessing steps for categorical and continuous features returning 
+    train and test dataframes with targets
+    '''
     
     #train test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=10, train_size = 0.7)
@@ -51,6 +53,9 @@ def preprocess(X, y):
 
 
 def run_linear(X_train, X_test, y_train, y_test):
+    """
+    Runs linear regression then returns the R2, MSE and betas
+    """
     linreg = LinearRegression()
     linreg.fit(X_train, y_train)
     
@@ -64,13 +69,17 @@ def run_linear(X_train, X_test, y_train, y_test):
     return train_R2, test_R2, train_mse, test_mse, coefs, intercept
     
 def run_lasso(X_train, X_test, y_train, y_test):
+    """
+    Runs LASSO regression then returns the alphas, R2, MSE and betas
+    """
     train_mse = []
     test_mse = []
     alphas = []
     train_R2 = []
     test_R2 = []
     coefs = []
-
+    intercept = []
+    
     for alpha in np.linspace(0, 40, num=200):
         lasso = Lasso(alpha = alpha)
         lasso.fit(X_train, y_train)
@@ -85,19 +94,25 @@ def run_lasso(X_train, X_test, y_train, y_test):
 
         alphas.append(alpha)
         coefs.append(lasso.coef_)
-
-    df_alpha = pd.DataFrame({"alpha":alphas, "Training_r^2": train_R2, "MSE_train": train_mse, "Testing_r^2": test_R2,
-                             "MSE_test": test_mse, "Coefficients": coefs})
-    return df_alpha.sort_values(by="Training_r^2", ascending = False)
+        intercept.append(lasso.intercept_)
+        
+    df_alpha = pd.DataFrame({"alpha":alphas, "training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2,
+                             "mse_test": test_mse, "intercept": intercept, "coefficients": coefs})
+    
+    return df_alpha.sort_values(by="training_r^2", ascending = False)
 
 
 def run_ridge(X_train, X_test, y_train, y_test):
+    """
+    Runs Ridge regression then returns the alphas, R2, MSE and betas
+    """
     train_mse = []
     test_mse = []
     alphas = []
     train_R2 = []
     test_R2 = []
     coefs = []
+    intercept = []
 
     for alpha in np.linspace(0, 40, num=200):
         ridge = Ridge(alpha = alpha)
@@ -113,7 +128,9 @@ def run_ridge(X_train, X_test, y_train, y_test):
 
         alphas.append(alpha)
         coefs.append(ridge.coef_)
+        intercept.append(ridge.intercept_)
 
-    df_alpha = pd.DataFrame({"alpha":alphas, "Training_r^2": train_R2, "MSE_train": train_mse, "Testing_r^2": test_R2,
-                             "MSE_test": test_mse, "Coefficients": coefs})
-    return df_alpha.sort_values(by="Training_r^2", ascending = False)
+    df_alpha = pd.DataFrame({"alpha":alphas, "training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2,
+                             "mse_test": test_mse, "intercept": intercept, "coefficients": coefs})
+    
+    return df_alpha.sort_values(by="training_r^2", ascending = False)
