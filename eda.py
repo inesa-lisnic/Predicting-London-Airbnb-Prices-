@@ -79,5 +79,5 @@ def update_money_columns(df, columns):
     This function converts money columns to 'float64'
     """
     for col in columns:
-        df[col] = df[col].map(lambda x: str(x).replace("$", "").replace(".00", "").replace(",", ""))
+        df[col] = df[col].map(lambda x: str(x).replace("$", "").replace(",", ""))
         df[col] = df[col].astype("float64")
