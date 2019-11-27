@@ -2,6 +2,8 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_squared_log_error
@@ -10,6 +12,12 @@ from sklearn.preprocessing import Imputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.linear_model import Lasso, Ridge
+
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+
 
 def preprocess(X, y):
     '''
@@ -61,12 +69,26 @@ def run_linear(X_train, X_test, y_train, y_test):
     
     train_R2 = linreg.score(X_train, y_train)
     test_R2 = linreg.score(X_test, y_test)
-    train_mse = mean_squared_error(y_train, linreg.predict(X_train))
-    test_mse = mean_squared_error(y_test, linreg.predict(X_test))
+    y_train_hat = linreg.predict(X_train)
+    y_test_hat = linreg.predict(X_test)
+    train_mse = mean_squared_error(y_train, y_train_hat)
+    test_mse = mean_squared_error(y_test, y_test_hat)
     coefs = linreg.coef_
     intercept = linreg.intercept_
     
+    result_dict = {"training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2, "mse_test": test_mse}
+    
+    print(result_dict)
+    sns.distplot(y_train)
+    sns.distplot(y_train_hat)
+    plt.show();
+    sns.distplot(y_test)
+    sns.distplot(y_test_hat)
+    plt.show();
+    
     return train_R2, test_R2, train_mse, test_mse, coefs, intercept
+    
+    
     
 def run_lasso(X_train, X_test, y_train, y_test):
     """
@@ -99,7 +121,9 @@ def run_lasso(X_train, X_test, y_train, y_test):
     df_alpha = pd.DataFrame({"alpha":alphas, "training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2,
                              "mse_test": test_mse, "intercept": intercept, "coefficients": coefs})
     
-    return df_alpha.sort_values(by="training_r^2", ascending = False)
+    return df_alpha.sort_values(by="testing_r^2", ascending = False)
+
+
 
 
 def run_ridge(X_train, X_test, y_train, y_test):
@@ -133,4 +157,111 @@ def run_ridge(X_train, X_test, y_train, y_test):
     df_alpha = pd.DataFrame({"alpha":alphas, "training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2,
                              "mse_test": test_mse, "intercept": intercept, "coefficients": coefs})
     
-    return df_alpha.sort_values(by="training_r^2", ascending = False)
+    return df_alpha.sort_values(by="testing_r^2", ascending = False)
+
+
+
+def lasso_coef(lasso_table, X_train, X_test, y_train, y_test):
+    """
+    Returns the coefs of Lasso model with the highest R^2
+    """
+    alpha = lasso_table.alpha.iloc[0]
+    
+    lasso = Lasso(alpha = alpha)
+    lasso.fit(X_train, y_train)
+    train_preds = lasso.predict(X_train)
+    test_preds = lasso.predict(X_test)
+    
+    result_dict = {"alpha": alpha, "training_r^2": lasso.score(X_train, y_train), "mse_train": mean_squared_error(y_train, train_preds),
+                   "testing_r^2": lasso.score(X_test, y_test), "mse_test": mean_squared_error(y_test, test_preds)}
+    
+    print(result_dict)
+    sns.distplot(y_train)
+    sns.distplot(train_preds)
+    plt.show();
+    sns.distplot(y_test)
+    sns.distplot(test_preds)
+    plt.show();
+        
+    best_model = pd.DataFrame({"predictor": list(X_train.columns), "coef":lasso.coef_})
+    best_model["abs"] = abs(best_model["coef"])
+    best_model = best_model.query("abs > 0.00001")
+    print("This model has ", len(best_model), " features vs ", len(X_train.columns), " original features")
+    return best_model.drop("abs", axis = 1)
+
+
+
+def ridge_coef(ridge_table, X_train, X_test, y_train, y_test):
+    """
+    Returns the coefs of Ridge model with the highest R^2
+    """
+    alpha = ridge_table.alpha.iloc[0]
+    
+    ridge = Ridge(alpha = alpha)
+    ridge.fit(X_train, y_train)
+    train_preds = ridge.predict(X_train)
+    test_preds = ridge.predict(X_test)
+    
+    result_dict = {"alpha": alpha, "training_r^2": ridge.score(X_train, y_train), "mse_train": mean_squared_error(y_train, train_preds),
+                   "testing_r^2": ridge.score(X_test, y_test), "mse_test": mean_squared_error(y_test, test_preds)}
+    
+    print(result_dict)
+    sns.distplot(y_train)
+    sns.distplot(train_preds)
+    plt.show();
+    sns.distplot(y_test)
+    sns.distplot(test_preds)
+    plt.show();
+    
+    best_model = pd.DataFrame({"predictor": list(X_train.columns), "coef":ridge_table.coefficients.iloc[0].reshape(len(X_train.columns),)})
+    best_model["abs"] = abs(best_model["coef"])
+    best_model = best_model.query("abs > 0.00001")
+    print("This model has ", len(best_model), " features vs ", len(X_train.columns), " original features")
+    return best_model.drop("abs", axis = 1)
+
+
+
+# Import relevant modules and functions
+
+def run_poly(X, y):
+    
+    # We'll fit 3 different polynomial regression models from degree 2 to degree 4
+    for index, degree in enumerate([2, 3, 4]):
+
+        # Instantiate PolynomialFeatures
+        poly = PolynomialFeatures(degree)
+
+        # Fit and transform X continuous
+        X_cf = X[[column for column in X.columns if X[column].dtype != "object"]]
+        X_cat = X[[column for column in X.columns if X[column].dtype == "object"]]
+        X_cf_poly = poly.fit_transform(X_cf)
+        
+        X_poly = pd.concat([X_cf_poly, X_cat], axis = 1)
+        
+        #split then scale and encode
+        X_poly_train, X_poly_test, y_train, y_test = preprocess(X_poly, y)
+  
+        # Get predicted values for transformed polynomial test data
+        reg_poly = LinearRegression().fit(X_poly_train, y_train)
+        
+        train_preds = reg_poly.predict(X_poly_train)
+        test_preds = reg_poly.predict(X_poly_test)                            
+
+        # Evaluate model performance on test data
+        
+        train_R2 = r2_score(y_train, train_preds)
+        test_R2 = r2_score(y_test, test_preds)
+        train_mse = mean_squared_error(y_train, train_preds)
+        test_mse = mean_squared_error(y_test, test_preds)
+        coefs = reg_poly.coef_
+        intercept = reg_poly.intercept_
+        result_dict = {"degree": degree, "training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2, "mse_test": test_mse}
+        print(result_dict)
+
+        # Create plot of predicted values
+        sns.distplot(y_train)
+        sns.distplot(train_preds)
+        plt.show();
+        sns.distplot(y_test)
+        sns.distplot(test_preds)
+        plt.show();
