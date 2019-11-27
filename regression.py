@@ -221,47 +221,31 @@ def ridge_coef(ridge_table, X_train, X_test, y_train, y_test):
 
 
 
-# Import relevant modules and functions
-
-def run_poly(X, y):
+def run_poly(X_train, X_test, y_train, y_test, degree):
+    """
+    Returns Polynomial regression then returns the R2, MSE
+    """
     
-    # We'll fit 3 different polynomial regression models from degree 2 to degree 4
-    for index, degree in enumerate([2, 3, 4]):
+    poly=PolynomialFeatures(degree = degree)
+    poly_x_train=poly.fit_transform(X_train)
 
-        # Instantiate PolynomialFeatures
-        poly = PolynomialFeatures(degree)
+    reg_poly=LinearRegression().fit(poly_x_train,y_train)
+    poly_x_test=poly.transform(X_test)
 
-        # Fit and transform X continuous
-        X_cf = X[[column for column in X.columns if X[column].dtype != "object"]]
-        X_cat = X[[column for column in X.columns if X[column].dtype == "object"]]
-        X_cf_poly = poly.fit_transform(X_cf)
-        
-        X_poly = pd.concat([X_cf_poly, X_cat], axis = 1)
-        
-        #split then scale and encode
-        X_poly_train, X_poly_test, y_train, y_test = preprocess(X_poly, y)
-  
-        # Get predicted values for transformed polynomial test data
-        reg_poly = LinearRegression().fit(X_poly_train, y_train)
-        
-        train_preds = reg_poly.predict(X_poly_train)
-        test_preds = reg_poly.predict(X_poly_test)                            
+    train_R2 = reg_poly.score(poly_x_train, y_train)
+    test_R2 = reg_poly.score(poly_x_test, y_test)
+    train_mse = mean_squared_error(y_train, reg_poly.predict(poly_x_train))
+    test_mse = mean_squared_error(y_test, reg_poly.predict(poly_x_test))
+    coefs = reg_poly.coef_
+    intercept = reg_poly.intercept_
 
-        # Evaluate model performance on test data
-        
-        train_R2 = r2_score(y_train, train_preds)
-        test_R2 = r2_score(y_test, test_preds)
-        train_mse = mean_squared_error(y_train, train_preds)
-        test_mse = mean_squared_error(y_test, test_preds)
-        coefs = reg_poly.coef_
-        intercept = reg_poly.intercept_
-        result_dict = {"degree": degree, "training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2, "mse_test": test_mse}
-        print(result_dict)
-
-        # Create plot of predicted values
-        sns.distplot(y_train)
-        sns.distplot(train_preds)
-        plt.show();
-        sns.distplot(y_test)
-        sns.distplot(test_preds)
-        plt.show();
+    result_dict = {"degree": degree, "training_r^2": train_R2, "mse_train": train_mse,
+                   "testing_r^2": test_mse, "mse_test": test_mse}
+    
+    print(result_dict)
+    sns.distplot(y_train)
+    sns.distplot(reg_poly.predict(poly_x_train))
+    plt.show();
+    sns.distplot(y_test)
+    sns.distplot(reg_poly.predict(poly_x_test))
+    plt.show();
