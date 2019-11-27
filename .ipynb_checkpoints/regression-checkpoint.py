@@ -187,7 +187,7 @@ def lasso_coef(lasso_table, X_train, X_test, y_train, y_test):
     best_model["abs"] = abs(best_model["coef"])
     best_model = best_model.query("abs > 0.00001")
     print("This model has ", len(best_model), " features vs ", len(X_train.columns), " original features")
-    return best_model.drop("abs", axis = 1)
+    print(best_model.drop("abs", axis = 1))
 
 
 
@@ -217,7 +217,7 @@ def ridge_coef(ridge_table, X_train, X_test, y_train, y_test):
     best_model["abs"] = abs(best_model["coef"])
     best_model = best_model.query("abs > 0.00001")
     print("This model has ", len(best_model), " features vs ", len(X_train.columns), " original features")
-    return best_model.drop("abs", axis = 1)
+    print(best_model.drop("abs", axis = 1))
 
 
 
