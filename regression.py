@@ -16,6 +16,9 @@ from sklearn.linear_model import Lasso, Ridge
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+
 
 
 
@@ -76,9 +79,13 @@ def run_linear(X_train, X_test, y_train, y_test):
     coefs = linreg.coef_
     intercept = linreg.intercept_
     
+    crossvalidation = KFold(n_splits=5, shuffle=True, random_state=10)
+    baseline = np.mean(cross_val_score(linreg, X_train, y_train, scoring="r2", cv=crossvalidation))
+    
     result_dict = {"training_r^2": train_R2, "mse_train": train_mse, "testing_r^2": test_R2, "mse_test": test_mse}
     
     print(result_dict)
+    print("baseline: ", baseline)
     sns.distplot(y_train)
     sns.distplot(y_train_hat)
     plt.show();
@@ -86,7 +93,7 @@ def run_linear(X_train, X_test, y_train, y_test):
     sns.distplot(y_test_hat)
     plt.show();
     
-    return train_R2, test_R2, train_mse, test_mse, coefs, intercept
+    #return train_R2, test_R2, train_mse, test_mse, coefs, intercept, baseline
     
     
     
@@ -172,8 +179,10 @@ def lasso_coef(lasso_table, X_train, X_test, y_train, y_test):
     train_preds = lasso.predict(X_train)
     test_preds = lasso.predict(X_test)
     
-    result_dict = {"alpha": alpha, "training_r^2": lasso.score(X_train, y_train), "mse_train": mean_squared_error(y_train, train_preds),
-                   "testing_r^2": lasso.score(X_test, y_test), "mse_test": mean_squared_error(y_test, test_preds)}
+    crossvalidation = KFold(n_splits=5, shuffle=True, random_state=10)
+    baseline = np.mean(cross_val_score(lasso, X_train, y_train, scoring="r2", cv=crossvalidation))
+    
+    result_dict = {"alpha": alpha, "training_r^2": lasso.score(X_train, y_train), "mse_train": mean_squared_error(y_train, train_preds),"testing_r^2": lasso.score(X_test, y_test), "mse_test": mean_squared_error(y_test, test_preds), "baseline": baseline}
     
     print(result_dict)
     sns.distplot(y_train)
@@ -202,8 +211,10 @@ def ridge_coef(ridge_table, X_train, X_test, y_train, y_test):
     train_preds = ridge.predict(X_train)
     test_preds = ridge.predict(X_test)
     
-    result_dict = {"alpha": alpha, "training_r^2": ridge.score(X_train, y_train), "mse_train": mean_squared_error(y_train, train_preds),
-                   "testing_r^2": ridge.score(X_test, y_test), "mse_test": mean_squared_error(y_test, test_preds)}
+    crossvalidation = KFold(n_splits=5, shuffle=True, random_state=10)
+    baseline = np.mean(cross_val_score(ridge, X_train, y_train, scoring="r2", cv=crossvalidation))
+    
+    result_dict = {"alpha": alpha, "training_r^2": ridge.score(X_train, y_train), "mse_train": mean_squared_error(y_train, train_preds),"testing_r^2": ridge.score(X_test, y_test), "mse_test": mean_squared_error(y_test, test_preds), "baseline": baseline}
     
     print(result_dict)
     sns.distplot(y_train)
