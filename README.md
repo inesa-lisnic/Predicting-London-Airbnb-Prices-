@@ -2,11 +2,7 @@ The purpose of this project is to investigate the London Airbnb market in order 
 
 As a source we used http://insideairbnb.com from where we downloaded the London Airbnb database which was scrapped in September 2019. 
 
-Our workflow consists of 4 parts:
-Data Cleaning
-Exploratory Data Analysis
-Creating the Regression Model
-Making the recommendations for Airbnb hosts.
+Our workflow consists of 4 parts: Data Cleaning, Exploratory Data Analysis, Creating the Regression Model, Making the recommendations for Airbnb hosts.
 
 At Data Cleaning stage we dealt with null values,outliers and duplicates. We removed the rows with null values or replaced them with their column mean or mode with the condition to not affect the entire data.
 The outliers were removed according to their positions on the frequency distribution, so we kept just the values corresponding with the zcore<|3|.
