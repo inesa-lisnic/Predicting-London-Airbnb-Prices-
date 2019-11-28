@@ -1,23 +1,41 @@
-The purpose of this project is to investigate the London Airbnb market in order to help Airbnb hosts (and potential hosts) increase their income based on their activity on this platform.
+## Predicting London Airbnb Prices
 
-As a source we used http://insideairbnb.com, from where we downloaded the London Airbnb database which was scrapped in September 2019. 
+### Module 4 Project
 
-Our workflow consists of 4 parts: Data Cleaning, Exploratory Data Analysis, Creating the Regression Model, Making the recommendations for Airbnb hosts.
+### Team Members
+        Grace Valmadrid
+        Inesa Lisnic
 
-At Data Cleaning stage we dealt with null values,outliers and duplicates. We removed the rows with null values, or replaced them with their column mean or mode, with the condition to not affect the entire data.
+### Goals
 
-The outliers were removed according to their positions on the frequency distribution, so we kept just the values corresponding to the zcore<|3|.
-Also we removed columns that were identical in terms of values.
+The purpose of this project is to investigate the London Airbnb market in order to help Airbnb hosts (and potential hosts) maximise their income and improve their ratings.
 
-At EDA stage we investigated the relationship between prices and other parameters from the dataframe, plotting scatters and analysing their patterns.
+Data is taken from http://insideairbnb.com, an independent data prrovider for Airbnb.  
 
-For Regression Model we defined our target as the price values and checked its correlation with other numerical predictors, defining the top high correlated predictors. Then we checked collinearity between the main predictors and others from the database, removing those ‘secondary’ predictors with high correlation with the main predictors.
+### Responsibilities
 
-We created 3 regression models: Linear Regression model, Lasso Model and Ridge Model.
-Then we sliced our database according to the properties types in 4 databases. 
-We chose the datasets with the most representative two types of properties: Homes/Apartments and  Private Rooms. After this we made 3 models mentioned above for each of these 2 datasets having the same target - the price.
+Workflow consists of 4 parts: Data Cleaning, Exploratory Data Analysis, Building Regression Model, Making the recommendations for Airbnb hosts.  Both of the team members wor
+
+At Data Cleaning stage we dealt with null values, outliers and duplicate columns. Null or zero values were either replaced with mean or mode. 
+
+The outliers were removed according to their positions on the frequency distribution, only those within zcore +/3 were retained.
+
+At EDA stage we investigated the relationship between prices and other features using scatterplots and correlation matrices.
+
+For the entire dataset, we built 4 regression models: Linear, Polynomial, Ridge and LASSO. Then we created subsets based on property type ('room_type'). We ran models for the 2 main property types: Homes/Apartments and  Private Rooms. 
 
 At the last step we made our recommendations for the Airbnb hosts based on our results from regression models and EDA.
 
 In order to optimize our work, we used a .py file where we built and stored the functions for regression models and for dealing with null values which are called in our Jupyter Notebook file.
 
+### Files
+
+Main notebook:
+https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/london_airbnb.ipynb
+
+Custom functions for data cleaning, EDA and modelling
+https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/eda.py
+https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/regression.py
+
+Linear and Polynomial models ran by Inesa
+https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/polynom%20regress.zip
