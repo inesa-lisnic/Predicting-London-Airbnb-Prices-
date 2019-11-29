@@ -12,6 +12,7 @@ The purpose of this project is to investigate the London Airbnb market in order 
 
 Data is taken from http://insideairbnb.com, an independent data prrovider for Airbnb.  
 
+Airbnb is an online marketplace for people who want to rent their property for lodging, primarily homestays, or tourism experiences. This project aims to help: Airbnb hosts to increase their income through improving the potential factors that influence the rent price; people who want to become Airbnb hosts and need to estimate the rent price of their property.
 
 
 ### Files
