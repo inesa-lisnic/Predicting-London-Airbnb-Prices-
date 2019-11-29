@@ -14,6 +14,12 @@ Data is taken from http://insideairbnb.com, an independent data prrovider for Ai
 
 Airbnb is an online marketplace for people who want to rent their property for lodging, primarily homestays, or tourism experiences. This project aims to help: Airbnb hosts to increase their income through improving the potential factors that influence the rent price; people who want to become Airbnb hosts and need to estimate the rent price of their property.
 
+After creating the model we found that the following parameters affect the most the rent price:
+Certains neighbourhoods like Westminster, Chelsea and the City of London will have a bigger positive influence on the price.
+The ‘Private room’ type will decrease the price more than ‘Home/Apartment type.
+The number of guests a property can accommodate will increase the price.
+The number of bedrooms will increase the price as well.
+
 
 ### Files
 
