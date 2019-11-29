@@ -8,11 +8,11 @@
 
 ### Executive Summary
 
-Airbnb is an online marketplace for people who want to rent their property for lodging. The purpose of this project is to investigate the London Airbnb market in order to help Airbnb hosts to assist in estimating the rent price of their property and also to increase their income through improving the factors that greatly influence the rent price. Data is taken from http://insideairbnb.com, an independent data prrovider for Airbnb.  There are 85,273 listings as of September 2019.
+Airbnb is an online marketplace for people who want to rent their property for lodging. The purpose of this project is to investigate the London Airbnb market in order to help the hosts in estimating the rent price of their property and also to increase their income through improving the factors that greatly influence the rent price. Data is taken from http://insideairbnb.com, an independent data prrovider for Airbnb.  There are 85,273 listings as of September 2019.
 
-The following regression methods were uses in the price modelling:  Linear, Polynomial, Ridge and LASSO.
+The following regression methods were uses in price modelling:  Linear, Polynomial, Ridge and LASSO.
 
-LASSO's best model resuled to an R^2 of 38% with only 50 features. The main features that affect the rent price the most are the following: 
+LASSO's best model resulted to an R^2 of 38% with only 50 features. The main features that affect the rent price the most are the following: 
         Neighbourhoods like Westminster, Chelsea and the City of London increase the rent by £51, £43 and £18, respectively 
         Private rooms decreases it by £34 while an entire home/apartment type increases it by only £3
         Boutique hotels and service apartments increase the rent by £27 and £18, respectively
