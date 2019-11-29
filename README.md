@@ -8,27 +8,30 @@
 
 ### Executive Summary
 
-The purpose of this project is to investigate the London Airbnb market in order to help Airbnb hosts maximise their income and improve their ratings.
+Airbnb is an online marketplace for people who want to rent their property for lodging. The purpose of this project is to investigate the London Airbnb market in order to help Airbnb hosts to assist in estimating the rent price of their property and also to increase their income through improving the factors that greatly influence the rent price. Data is taken from http://insideairbnb.com, an independent data prrovider for Airbnb.  There are 85,273 listings as of September 2019.
 
-Data is taken from http://insideairbnb.com, an independent data prrovider for Airbnb.  
+The following regression methods were uses in the price modelling:  Linear, Polynomial, Ridge and LASSO.
 
-Airbnb is an online marketplace for people who want to rent their property for lodging, primarily homestays, or tourism experiences. This project aims to help: Airbnb hosts to increase their income through improving the potential factors that influence the rent price; people who want to become Airbnb hosts and need to estimate the rent price of their property.
+LASSO's best model resuled to an R^2 of 38% with only 50 features. The main features that affect the rent price the most are the following: 
+        Neighbourhoods like Westminster, Chelsea and the City of London increase the rent by £51, £43 and £18, respectively 
+        Private rooms decreases it by £34 while an entire home/apartment type increases it by only £3
+        Boutique hotels and service apartments increase the rent by £27 and £18, respectively
+        Every additional guest a property can accommodate provides additional income of £14
+        An additional bedroom increases the price by £13
 
-After creating the model we found that the following parameters affect the most the rent price:
-Certains neighbourhoods like Westminster, Chelsea and the City of London will have a bigger positive influence on the price.
-The ‘Private room’ type will decrease the price more than ‘Home/Apartment type.
-The number of guests a property can accommodate will increase the price.
-The number of bedrooms will increase the price as well.
-
+Recommendations:
+        Increase capacity and number of beds and amenities offered
+        Encourage guests to write good reviews
+        Maintain cleanliness and improve accuracy, responsiveness and check-in process
 
 ### Files
 
 Main notebook:
-https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/london_airbnb.ipynb
+        https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/london_airbnb.ipynb
 
 Custom functions for data cleaning, EDA and modelling
-https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/eda.py
-https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/regression.py
+        https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/eda.py
+        https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/regression.py
 
 Linear and Polynomial models ran by Inesa
-https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/polynom%20regress.zip
+        https://github.com/inesa-lisnic/Predicting-London-Airbnb-Prices-/blob/master/polynom%20regress.zip
